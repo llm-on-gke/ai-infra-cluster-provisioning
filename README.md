@@ -77,6 +77,26 @@ few ways to provision a cluster:
   (or plan to have) an HPC Toolkit Blueprint and would like to have the same
   `ghpc deploy` create this cluster along with all your other infrastructure.
 
+### Build docker image to deploy cluster
+Clone this repo to Cloud Shell terminal/GCE VM/Cloud Workstation/your own machine
+```bash
+git clone https://github.com/llm-on-gke/ai-infra-cluster-provisioning
+cd ai-infra-cluster-provisioning
+```
+
+Run the command, to create Artifact Registry repo if it is first time to build your own image with code customization
+```bash
+gcloud artifacts repositories create cluster-provision-dev --repository-format=docker --location=us
+```
+Then build your own image:
+```bash
+gcloud builds submit .
+```
+Wait for a few minutes, and verify creation of the following docker image from Google Cloud Console, Artifact Registry page:
+
+Artifact Registry Repo and image: cluster-provision-dev/cluster-provision-image
+
+
 ### Run the docker image
 
 For this method, all you need (in addition to the above requirements) is a
