@@ -197,7 +197,14 @@ resource "google_container_node_pool" "node-pools" {
     # disabling auto_upgrade to stop automatic upgrade during customer workload execution.
     auto_upgrade = false
   }
-
+  private_cluster_config {
+    enable_private_nodes    = true
+    enable_private_endpoint = false
+    master_ipv4_cidr_block  = "172.16.0.0/28" # Choose a private CIDR block
+    master_global_access_config {
+      enabled = false
+    }
+  }
   node_config {
     service_account = local.node_service_account
     machine_type    = var.node_pools[count.index].machine_type
@@ -250,6 +257,14 @@ resource "google_container_node_pool" "node-pools" {
         consume_reservation_type = "SPECIFIC_RESERVATION"
         key                      = "compute.googleapis.com/reservation-name"
         values                   = [reservation_affinity.value]
+      }
+    }
+    dynamic "reservation_affinity" {
+     for_each = var.node_pools[count.index].reservation != null ? [1] : []
+      content {
+        consume_reservation_type = "SPECIFIC_RESERVATION"
+        key                      = "compute.googleapis.com/reservation-name"
+        values                   = [var.node_pools[count.index].reservation]
       }
     }
 
