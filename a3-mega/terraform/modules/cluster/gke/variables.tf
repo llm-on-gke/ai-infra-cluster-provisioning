@@ -115,6 +115,7 @@ variable "node_pools" {
     node_count   = number,
     machine_type = optional(string, "a3-megagpu-8g"),
     reservation = optional(string),
+    specific_reservation = optional(string),
     compact_placement_policy = optional(object({
       new_policy           = optional(bool, false)
       existing_policy_name = optional(string)

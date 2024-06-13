@@ -178,7 +178,7 @@ resource "google_container_cluster" "cluster" {
 # We define explicit node pools, so that it can be modified without
 # having to destroy the entire cluster.
 resource "google_container_node_pool" "node-pools" {
-  provider = google-beta
+  provider = google #provider = google-beta
   count    = length(var.node_pools)
 
   project        = var.project_id
@@ -256,10 +256,18 @@ resource "google_container_node_pool" "node-pools" {
      for_each = var.node_pools[count.index].reservation != null ? [1] : []
       content {
         consume_reservation_type = "ANY_RESERVATION"
-        #key                      = "compute.googleapis.com/reservation-name"
-        #values                   = [var.node_pools[count.index].reservation]
       }
     }
+
+    dynamic "reservation_affinity" {
+     for_each = var.node_pools[count.index].specific_reservation != null ? [1] : []
+      content {
+        consume_reservation_type = "SPECIFIC_RESERVATION"
+        key                      = "compute.googleapis.com/reservation-name"
+        values                   = [var.node_pools[count.index].specific_reservation]
+      }
+    }
+
 
     oauth_scopes = local.oauth_scopes
   }
