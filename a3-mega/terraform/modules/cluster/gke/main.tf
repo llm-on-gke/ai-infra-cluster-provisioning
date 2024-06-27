@@ -178,7 +178,7 @@ resource "google_container_cluster" "cluster" {
 # We define explicit node pools, so that it can be modified without
 # having to destroy the entire cluster.
 resource "google_container_node_pool" "node-pools" {
-  provider = google #provider = google-beta
+  provider = provider = google-beta
   count    = length(var.node_pools)
 
   project        = var.project_id
