@@ -273,6 +273,7 @@ resource "google_container_node_pool" "node-pools" {
   }
 
   network_config {
+    enable_private_nodes=true
     dynamic "additional_node_network_configs" {
       for_each = toset(range(1, length(module.network.network_names)))
       iterator = id
