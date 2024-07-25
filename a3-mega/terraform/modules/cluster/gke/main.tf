@@ -204,7 +204,7 @@ resource "google_container_node_pool" "node-pools" {
     image_type      = "COS_CONTAINERD"
     disk_size_gb    = var.disk_size_gb
     disk_type       = var.disk_type
-
+    preemptible =  var.node_pools[count.index].spot
     ephemeral_storage_local_ssd_config {
       local_ssd_count = 16
     }
@@ -332,7 +332,7 @@ module "kubectl-apply" {
   cluster_id = resource.google_container_cluster.cluster.id
   daemonsets = {
     device_plugin = "https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/master/cmd/nvidia_gpu/device-plugin.yaml"
-    nvidia_driver = "https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/master/nvidia-driver-installer/cos/daemonset-preloaded.yaml"
+    nvidia_driver = "https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/master/nvidia-driver-installer/cos/daemonset-preloaded-latest.yaml"
     nccl_plugin   = "https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/master/gpudirect-tcpxo/nccl-tcpxo-installer.yaml"
   }
   enable     = var.ksa != null

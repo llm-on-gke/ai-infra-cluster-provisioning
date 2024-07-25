@@ -114,6 +114,7 @@ variable "node_pools" {
     zone         = string,
     node_count   = number,
     machine_type = optional(string, "a3-highgpu-8g"),
+    spot = optional(bool,false)
     compact_placement_policy = optional(object({
       new_policy           = optional(bool, false)
       existing_policy_name = optional(string)
