@@ -197,7 +197,7 @@ resource "google_container_node_pool" "node-pools" {
     image_type      = "COS_CONTAINERD"
     disk_size_gb    = var.disk_size_gb
     disk_type       = var.disk_type
-
+    preemptible = var.node_pools[count.index].spot
     ephemeral_storage_local_ssd_config {
       local_ssd_count = 16
     }
